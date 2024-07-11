@@ -1,0 +1,159 @@
+## This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
+## For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
+#
+#name: Node.js Package
+#
+#on:
+#  release:
+#    types: [created]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 16
+#      - run: npm ci
+#      - run: npm test
+#
+#  publish-npm:
+#    needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v4
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 16
+#          registry-url: https://registry.npmjs.org/
+#      - run: npm ci
+#
+#      - run: npm publish
+#        env:
+#          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+
+#--------------------chatgpt version-------------------
+#name: React CI
+#
+#on:
+#  push:
+#    branches: [ master ]
+#  pull_request:
+#    branches: [ master ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#    - name: Checkout repository
+#      uses: actions/checkout@v2
+#
+#    - name: Set up Node.js
+#      uses: actions/setup-node@v2
+#      with:
+#        node-version: '14'
+#
+#    - name: Install dependencies
+#      run: npm install
+#
+#    - name: Run tests
+#      run: npm test -- --watchAll=false
+#
+#    - name: Build project
+#      run: npm run build
+#
+#    - name: Upload production-ready build files
+#      uses: actions/upload-artifact@v2
+#      with:
+#        name: build
+#        path: build/
+
+#--------------------prof song's version-------------------
+
+name: React App Deployment # name of the workflo
+
+
+
+on:
+
+  push:
+
+    branches:
+
+      - master # branch name
+
+
+
+jobs:
+
+  deploy-react-to-gh-pages:
+
+    runs-on: ubuntu-latest
+
+    env:
+
+      EXAMPLE: example # environment variable
+
+
+
+    steps:
+
+      # checkout the repository content to github runner
+
+      - name: Checkout
+
+        uses: actions/checkout@v2
+
+
+
+      # setup nodejs environment
+
+      - name: Setup Node.js environment
+
+        uses: actions/setup-node@v2.1.5
+
+        with:
+
+          node-version: "18.16.1"
+
+
+
+      # cache the dependencies to speed up the build
+
+      - name: Cache dependencies
+
+        uses: actions/cache@v2
+
+        with:
+
+          path: ~/.npm
+
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
+          restore-keys: |
+
+            ${{ runner.os }}-node-
+
+
+
+      # install dependencies
+
+      - name: Install dependencies
+
+        run: npm i
+
+
+      # test
+      - name: Run tests
+        run: npm test -- --watchAll=false
+
+
+
+      # build the react app
+
+      - name: Build
+
+        run: npm run build
+
